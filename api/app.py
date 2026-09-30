@@ -1,7 +1,11 @@
 from pathlib import Path
+import sys
 
 import joblib
 import pandas as pd
+import numpy
+import sklearn
+import catboost
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
@@ -90,6 +94,23 @@ def health():
     return {
         "status": "healthy",
         "model_loaded": True,
+    }
+
+
+# =============================================================================
+# RUNTIME VERSION DIAGNOSTICS
+# =============================================================================
+
+@app.get("/version")
+def version():
+
+    return {
+        "python": sys.version,
+        "sklearn": sklearn.__version__,
+        "pandas": pd.__version__,
+        "numpy": numpy.__version__,
+        "joblib": joblib.__version__,
+        "catboost": catboost.__version__,
     }
 
 
