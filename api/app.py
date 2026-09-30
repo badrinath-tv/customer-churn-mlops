@@ -1,5 +1,6 @@
 from pathlib import Path
 import sys
+import hashlib
 
 import joblib
 import pandas as pd
@@ -132,6 +133,26 @@ def model_info():
             }
             for name, step in getattr(model, "steps", [])
         ],
+    }
+
+
+# =============================================================================
+# MODEL FILE HASH
+# =============================================================================
+
+@app.get("/model-hash")
+def model_hash():
+
+    sha256 = hashlib.sha256()
+
+    with open(MODEL_PATH, "rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            sha256.update(chunk)
+
+    return {
+        "model_file": str(MODEL_PATH),
+        "sha256": sha256.hexdigest(),
+        "size_bytes": MODEL_PATH.stat().st_size,
     }
 
 
