@@ -115,6 +115,27 @@ def version():
 
 
 # =============================================================================
+# MODEL DIAGNOSTICS
+# =============================================================================
+
+@app.get("/model-info")
+def model_info():
+
+    return {
+        "model_type": type(model).__name__,
+        "model_module": type(model).__module__,
+        "steps": [
+            {
+                "name": name,
+                "type": type(step).__name__,
+                "module": type(step).__module__,
+            }
+            for name, step in getattr(model, "steps", [])
+        ],
+    }
+
+
+# =============================================================================
 # PREDICTION ENDPOINT
 # =============================================================================
 
