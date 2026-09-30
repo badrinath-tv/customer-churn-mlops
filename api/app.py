@@ -199,6 +199,54 @@ def preprocessor_test():
             "error": str(e),
         }
 
+# =============================================================================
+# SMOTE DIAGNOSTICS
+# =============================================================================
+
+@app.get("/smote-test")
+def smote_test():
+
+    try:
+
+        test_data = pd.DataFrame(
+            [{
+                "CreditScore": 650,
+                "Geography": "France",
+                "Gender": "Male",
+                "Age": 40,
+                "Tenure": 3,
+                "Balance": 60000,
+                "NumOfProducts": 2,
+                "HasCrCard": 1,
+                "IsActiveMember": 1,
+                "EstimatedSalary": 100000,
+            }]
+        )
+
+        preprocessor = model.named_steps["preprocessor"]
+        smote = model.named_steps["smote"]
+
+        transformed = preprocessor.transform(test_data)
+
+        # SMOTE requires at least two classes and normally multiple samples.
+        # Therefore we only inspect its configuration here.
+        return {
+            "status": "success",
+            "preprocessor_output_shape": list(transformed.shape),
+            "smote_type": type(smote).__name__,
+            "smote_module": type(smote).__module__,
+            "smote_sampling_strategy": str(smote.sampling_strategy),
+            "smote_k_neighbors": smote.k_neighbors,
+        }
+
+    except Exception as e:
+
+        return {
+            "status": "error",
+            "error_type": type(e).__name__,
+            "error": str(e),
+        }
+
 
 # =============================================================================
 # PREDICTION ENDPOINT
