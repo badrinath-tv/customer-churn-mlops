@@ -157,6 +157,50 @@ def model_hash():
 
 
 # =============================================================================
+# PREPROCESSOR DIAGNOSTICS
+# =============================================================================
+
+@app.get("/preprocessor-test")
+def preprocessor_test():
+
+    try:
+
+        test_data = pd.DataFrame(
+            [{
+                "CreditScore": 650,
+                "Geography": "France",
+                "Gender": "Male",
+                "Age": 40,
+                "Tenure": 3,
+                "Balance": 60000,
+                "NumOfProducts": 2,
+                "HasCrCard": 1,
+                "IsActiveMember": 1,
+                "EstimatedSalary": 100000,
+            }]
+        )
+
+        preprocessor = model.named_steps["preprocessor"]
+
+        transformed = preprocessor.transform(test_data)
+
+        return {
+            "status": "success",
+            "input_shape": list(test_data.shape),
+            "output_shape": list(transformed.shape),
+            "output_type": type(transformed).__name__,
+        }
+
+    except Exception as e:
+
+        return {
+            "status": "error",
+            "error_type": type(e).__name__,
+            "error": str(e),
+        }
+
+
+# =============================================================================
 # PREDICTION ENDPOINT
 # =============================================================================
 
