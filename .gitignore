@@ -1,0 +1,31 @@
+.venv/
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.env
+.vscode/
+.idea/
+catboost_info/
+
+# Raw datasets
+data/raw/
+
+# Large/experimental benchmark model artifacts
+models/benchmark_models/
+models/final_benchmark/
+models/experts/
+models/gating/
+models/best_model.pkl
+models/best_experiment_model.pkl
+models/preprocessor.pkl
+
+# Keep only the final deployable model
+models/final_model/
+
+# Re-include the final deployable pipeline
+!models/final_model/
+!models/final_model/churn_pipeline.pkl
+!models/final_model/confusion_matrix.csv
+!models/final_model/feature_preprocessor.pkl
+!models/final_model/final_metrics.csv
+!models/final_model/model_info.json
